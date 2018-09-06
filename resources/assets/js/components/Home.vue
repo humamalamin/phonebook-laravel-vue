@@ -7,6 +7,9 @@
                 <button class="button is-link is-outlined" @click="openAdd">
                     Add New
                 </button>
+                <span class="is-pulled-right" v-if="loading">
+                    <i class="fa fa-refresh fa-spin fa-2x fa-fw"></i>
+                </span>
             </p>
             <div class="panel-block">
                 <p class="control has-icons-left">
@@ -55,7 +58,8 @@
                 showActive:'',
                 updateActive:'',
                 lists : {},
-                errors:{}
+                errors:{},
+                loading: false
             }
         },
 
@@ -77,7 +81,8 @@
             },
             del(key,id){
                 if(confirm("Are you sure ?")){
-                    axios.delete(`/phonebook/${id}`).then((response) => this.lists.splice(key,1))
+                    this.loading = !this.loading
+                    axios.delete(`/phonebook/${id}`).then((response) => {this.lists.splice(key,1);this.loading = !this.loading;})
                     .catch((error) => this.errors = error.response.data.errors);   
                 }
             },
