@@ -22,7 +22,7 @@
                     {{item.name}}
                 </span>
                 <span class="panel-icon column is-1">
-                    <i class="has-text-danger fa fa-trash" aria-hidden="true"></i>
+                    <i class="has-text-danger fa fa-trash" aria-hidden="true" @click="del(key,item.id)"></i>
                 </span>
                 <span class="panel-icon column is-1">
                     <i class="has-text-info fa fa-edit" aria-hidden="true" @click="openUpdate(key)"></i>
@@ -74,6 +74,12 @@
                 console.log(this.lists[key])
                 this.$children[1].list = this.lists[key]
                 this.showActive = 'is-active'
+            },
+            del(key,id){
+                if(confirm("Are you sure ?")){
+                    axios.delete(`/phonebook/${id}`).then((response) => this.lists.splice(key,1))
+                    .catch((error) => this.errors = error.response.data.errors);   
+                }
             },
             openUpdate(key)
             {
